@@ -118,12 +118,14 @@ app.controller("myCtrl", function($scope, $http) {
 			function(response) {
 		
 				$scope.showSpinner = false;
-				$scope.error = "Error registering " + response.statusText;
+				$scope.error = "Error getting upcoming events " + response.statusText;
 			}
 		);
 	};
 	
     $scope.register = function () {
+			
+		$scope.error = "";
 			
 		if( !$scope.selectedEvent ) {
 			$scope.error = "Select a venue";
@@ -134,8 +136,6 @@ app.controller("myCtrl", function($scope, $http) {
 			$scope.error = "Please enter a seat key";
 			return;
 		}
-	
-		$scope.error = "";
 	
 		var myData = {
 			eventId: $scope.selectedEvent.id,
@@ -165,7 +165,7 @@ app.controller("myCtrl", function($scope, $http) {
     };
 	
 	$scope.ShowVendors = function() {
-		// fetch the vendors
+
 		$http.get($scope.baseUrl + "/api/Events/" + $scope.customerEventAttendanceProfile.event.id + "/vendor-event-profiles")
 		.then(function(response) {
 			$scope.vendorEventProfiles = response.data;
