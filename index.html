@@ -68,8 +68,9 @@ var app = angular.module("Snackr", []);
 	
 app.controller("myCtrl", function($scope, $http) {   
 			
-	$scope.baseUrl = "https://snackr-webapi-servicegateway-ordering-dev.azurewebsites.net";	// dev
-	//$scope.baseUrl = "https://snackr-webapi-servicegateway-ordering.azurewebsites.net";	// release
+	//$scope.baseUrl = 	"https://snackr-webapi-servicegateway-ordering-dev.azurewebsites.net";				// dev
+	$scope.baseUrl = 	"https://snackr-webapi-servicegateway-ordering-intergration.azurewebsites.net";	// integration
+	//$scope.baseUrl = 	"https://snackr-webapi-servicegateway-ordering.azurewebsites.net";				// release
 	
 	$scope.cartItems = [];
 	
@@ -128,13 +129,18 @@ app.controller("myCtrl", function($scope, $http) {
 			$scope.error = "Select a venue";
 			return;
 		}
+		
+		if( !$scope.seatKey ) {
+			$scope.error = "Please enter a seat key";
+			return;
+		}
 	
 		$scope.error = "";
 	
 		var myData = {
-				eventId: $scope.selectedEvent.id,
-				seatKey: $scope.seatKey
-			};
+			eventId: $scope.selectedEvent.id,
+			seatKey: $scope.seatKey
+		};
 	
 		$scope.showSpinner = true;
 	
@@ -149,25 +155,30 @@ app.controller("myCtrl", function($scope, $http) {
 		
 			$scope.customerEventAttendanceProfile = response.data;
 
-			// fetch the vendors
-			$http.get($scope.baseUrl + "/api/Events/" + $scope.customerEventAttendanceProfile.event.id + "/vendor-event-profiles")
-			.then(function(response) {
-				$scope.vendorEventProfiles = response.data;
-				$scope.currentView = "Vendors";				
-			}, 
-			function(response) {
-			
-				$scope.showSpinner = false;
-			
-				$scope.error = "Error getting vendors: " + response.statusText;
-				console.log(response);
-			});
+			$scope.ShowVendors();
 		}, 
 		function(response) {
-			$scope.error = "Error registering: " + response.statusText;
+			$scope.showSpinner = false;
+			$scope.error = "Error registering " + response.statusText;
             console.log(response);
 		});
     };
+	
+	$scope.ShowVendors = function() {
+		// fetch the vendors
+		$http.get($scope.baseUrl + "/api/Events/" + $scope.customerEventAttendanceProfile.event.id + "/vendor-event-profiles")
+		.then(function(response) {
+			$scope.vendorEventProfiles = response.data;
+			$scope.currentView = "Vendors";				
+		}, 
+		function(response) {
+		
+			$scope.showSpinner = false;
+		
+			$scope.error = "Error getting vendors: " + response.statusText;
+			console.log(response);
+		});
+	};
 	
 	$scope.SelectVendor = function( vendorId ) {
 				
