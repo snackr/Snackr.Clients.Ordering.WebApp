@@ -77,14 +77,23 @@ app.controller("myCtrl", function($scope, $http) {
 	$scope.showSpinner = true;
 	
 	$http.get($scope.baseUrl + "/api/Events/upcoming")
-    .then(function(response) {
-		$scope.showSpinner = false;
-		
-		$scope.selectedEvent = response.data[0];	// default to first value
-		$scope.upcomingEvents = response.data;
-		
-		$scope.currentView = "UpcomingEvents";				
-    });
+    .then(
+		function(response) {
+			$scope.showSpinner = false;
+			
+			$scope.selectedEvent = response.data[0];	// default to first value
+			$scope.upcomingEvents = response.data;
+			
+			$scope.currentView = "UpcomingEvents";				
+		},
+		function(response) {
+	
+			$scope.showSpinner = false;
+			
+			$scope.error = "Error registering: " + response.statusText;
+            console.log(response);
+		}
+	);
 	
     $scope.register = function () {
 			
