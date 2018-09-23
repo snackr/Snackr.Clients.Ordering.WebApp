@@ -73,25 +73,54 @@ app.controller("myCtrl", function($scope, $http) {
 	
 	$scope.cartItems = [];
 	
-	// get upcoming events
+	// get current user
 	$scope.showSpinner = true;
-	
-	$http.get($scope.baseUrl + "/api/Events/upcoming")
+	$http.get($scope.baseUrl + "/api/Auth/GetCurrentUser")
     .then(
 		function(response) {
-			$scope.showSpinner = false;
+		
+			if( !response.data.isAuthenticated ) {
+				document.location = response.data.signInUrl;
+			} else {
+		
+				$scope.user = response.data.user;
 			
-			$scope.selectedEvent = response.data[0];	// default to first value
-			$scope.upcomingEvents = response.data;
+				console.log(response);
 			
-			$scope.currentView = "UpcomingEvents";				
+				$scope.showSpinner = false;
+				
+				$scope.getUpcomingEvents();
+			}
 		},
 		function(response) {
 	
+			console.log(response);
+	
 			$scope.showSpinner = false;
-			$scope.error = "Error registering " + response.statusText;
+			$scope.error = "Getting current user " + response.statusText;
 		}
 	);
+		
+	$scope.getUpcomingEvents = function() {
+	
+		$scope.showSpinner = true;
+		$http.get($scope.baseUrl + "/api/Events/upcoming")
+		.then(
+			function(response) {
+				$scope.showSpinner = false;
+				
+				$scope.selectedEvent = response.data[0];	// default to first value
+				$scope.upcomingEvents = response.data;
+				
+				$scope.currentView = "UpcomingEvents";				
+			},
+			function(response) {
+		
+				$scope.showSpinner = false;
+				$scope.error = "Error registering " + response.statusText;
+			}
+		);
+	};
 	
     $scope.register = function () {
 			
@@ -291,12 +320,16 @@ app.controller("myCtrl", function($scope, $http) {
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		  </button>
-		  <a class="navbar-brand" href="#">Snackr</a>
-		
-		
+		  
+			<a class="navbar-brand" href="#">Snackr</a>
+
 			<button type="button" class="btn btn-primary addToCart" ng-click="ViewCart()" ng-show="cartItems.length > 0">
 				<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true">({{cartItems.length}})</span>
 			</button>
+			
+			<ul class="nav navbar-nav navbar-right">
+			  <li>{{user.displayName}}</li>
+			</ul>
 		</div>
 
 		<!-- Collect the nav links, forms, and other content for toggling -->
@@ -313,12 +346,12 @@ app.controller("myCtrl", function($scope, $http) {
 	  </div><!-- /.container-fluid -->
 	</nav>
 	
+	<i ng-show="showSpinner" class="fa fa-spinner fa-spin large-spinner page-center"></i>
+	
 	<div ng-show="error" class="alert alert-danger alert-dismissible" role="alert">
 		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		{{error}}
+		<strong>Error:</strong> {{error}}
 	</div>
-	
-	<i ng-show="showSpinner" class="fa fa-spinner fa-spin large-spinner page-center"></i>
 	
 	<div class="alert alert-warning" style="text-align: center" role="alert" ng-show="OrderID">
 		Order ID: {{OrderID}}<br/>
@@ -327,7 +360,7 @@ app.controller("myCtrl", function($scope, $http) {
 	
 	<!-- upcoming events -->	
 	<div ng-show="currentView == 'UpcomingEvents'">
-		<div>Choose Your Venue</div>	
+		<div>Choose Upcoming Event</div>	
 		<select class="form-control" ng-model="selectedEvent" ng-options="x.name for x in upcomingEvents"></select>
 		<div>Where are you sitting today?</div>
 		<div><input type="text" ng-model="seatKey" class="form-control"></div>
