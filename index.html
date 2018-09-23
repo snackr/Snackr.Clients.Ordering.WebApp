@@ -89,9 +89,7 @@ app.controller("myCtrl", function($scope, $http) {
 		function(response) {
 	
 			$scope.showSpinner = false;
-			
-			$scope.error = "Error registering: " + response.statusText;
-            console.log(response);
+			$scope.error = "Error registering " + response.statusText;
 		}
 	);
 	
@@ -447,7 +445,7 @@ app.controller("myCtrl", function($scope, $http) {
 		</div>
 		
 		<div style="text-align: center" ng-show="OrderID">
-			<button type="button" class="btn btn-warning btn-lg" ng-click="Checkout()">Update Order</button>
+			Order has been submitted
 		</div>
 		
 	</div>
