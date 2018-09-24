@@ -66,7 +66,7 @@
 <script>
 var app = angular.module("Snackr", []);
 	
-app.controller("myCtrl", function($scope, $http) {   
+app.controller("myCtrl", function($scope, $http, $interval) {   
 			
 	$scope.baseUrl = 	"https://snackr-webapi-servicegateway-fulfilment-dev.azurewebsites.net";				// dev
 	//$scope.baseUrl = 	"";	// integration
@@ -81,13 +81,12 @@ app.controller("myCtrl", function($scope, $http) {
 		function(response) {
 		
 			$scope.orders = response.data;
+			$scope.lastUpdated = new Date().toLocaleTimeString();
 			console.log(response);
 			
 			$scope.showSpinner = false;
 				
 			$scope.currentView = "Orders";
-				
-			//$scope.getUpcomingEvents();
 		},
 		function(response) {
 	
@@ -97,7 +96,23 @@ app.controller("myCtrl", function($scope, $http) {
 			$scope.error = "Getting Order Fulfilments " + response.statusText;
 		}
 	);
-//		
+	
+	// keep getting orders every 15 seconds
+	$interval(function () {
+        $http.get($scope.baseUrl + "/api/OrderFulfilments")
+		.then(
+			function(response) {			
+				console.log("OrderFulfilments");
+				$scope.orders = response.data;
+				$scope.lastUpdated = new Date().toLocaleTimeString();
+			},
+			function(response) {		
+				console.log(response);
+				$scope.error = "Refreshing Order Fulfilments " + response.statusText;
+			}
+		);
+    }, 15000);
+	
 //	$scope.getUpcomingEvents = function() {
 //	
 //		$scope.showSpinner = true;
@@ -338,7 +353,7 @@ app.controller("myCtrl", function($scope, $http) {
 	
 	<!-- orders -->	
 	<div ng-show="currentView == 'Orders'">
-		<div>Orders</div>	
+		<div class="text-muted pull-right">Last Updated: {{lastUpdated}}</div>	
 		
 		<table class="table table-striped">
 			<thead>
