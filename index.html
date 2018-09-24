@@ -68,8 +68,8 @@ var app = angular.module("Snackr", []);
 	
 app.controller("myCtrl", function($scope, $http) {   
 			
-	//$scope.baseUrl = 	"https://snackr-webapi-servicegateway-ordering-dev.azurewebsites.net";				// dev
-	$scope.baseUrl = 	"https://snackr-webapi-servicegateway-ordering-intergration.azurewebsites.net";	// integration
+	$scope.baseUrl = 	"https://snackr-webapi-servicegateway-ordering-dev.azurewebsites.net";				// dev
+	//$scope.baseUrl = 	"https://snackr-webapi-servicegateway-ordering-intergration.azurewebsites.net";	// integration
 	//$scope.baseUrl = 	"https://snackr-webapi-servicegateway-ordering.azurewebsites.net";				// release
 	
 	$scope.cartItems = [];
@@ -85,8 +85,6 @@ app.controller("myCtrl", function($scope, $http) {
 			} else {
 		
 				$scope.user = response.data.user;
-			
-				console.log(response);
 			
 				$scope.showSpinner = false;
 				
