@@ -76,8 +76,15 @@ app.controller("myCtrl", function($scope, $http, $interval) {
 	//$scope.baseUrl = 	"";	// integration
 	//$scope.baseUrl = 	"";				// release
 	
-//	$scope.cartItems = [];
-//	
+	$scope.statuses = [
+		{ name: "collected", cssClass: "bg-warning"},
+		{ name: "rejected",  cssClass: "bg-danger"},
+		{ name: "not-at-pickup-location",  cssClass: "bg-danger"},
+		{ name: "arrived-at-drop-off-location",  cssClass: "bg-success"},
+		{ name: "completed", cssClass: "bg-success"},
+		{ name: "failed", cssClass: "bg-danger"}
+	];
+
 	// get deliveries
 	$scope.showSpinner = true;
 	$http.get($scope.baseUrl + "/api/Deliverys")
@@ -126,19 +133,10 @@ app.controller("myCtrl", function($scope, $http, $interval) {
 		
 		var url = $scope.baseUrl + "/api/Deliverys/" + order.id + "/";
 		
-		switch(status) {
-			case "collected":
-			case "rejected":
-			case "not-at-pickup-location":
-			case "arrived-at-drop-off-location":				
-			case "completed":
-			case "failed":
-				url += status;
-				break;
-				
-			default:
-				alert("Unsupported status: " + status );
-				return;
+		if ($scope.statuses.some(e => e.name === status)) {
+			url += status;
+		} else {
+			alert("Unsupported status: " + status );
 		}
 		
 		$scope.showSpinner = true;
@@ -223,17 +221,8 @@ app.controller("myCtrl", function($scope, $http, $interval) {
 							{{x.status}} <span class="caret"></span>
 						  </button>
 						  <ul class="dropdown-menu">
-							<li class="bg-warning"><a href="#" ng-click="SetStatus(x, 'collected')">Collected</a></li>
-							<li role="separator" class="divider"></li>
-							<li class="bg-danger"><a href="#" ng-click="SetStatus(x, 'rejected')">Rejected</a></li>
-							<li role="separator" class="divider"></li>
-							<li class="bg-danger"><a href="#" ng-click="SetStatus(x, 'not-at-pickup-location')">not-at-pickup-location</a></li>
-							<li role="separator" class="divider"></li>
-							<li class="bg-success"><a href="#" ng-click="SetStatus(x, 'arrived-at-drop-off-location')">arrived-at-drop-off-location</a></li>
-							<li role="separator" class="divider"></li>
-							<li class="bg-success"><a href="#" ng-click="SetStatus(x, 'completed')">Completed</a></li>
-							<li role="separator" class="divider"></li>
-							<li class="bg-danger"><a href="#" ng-click="SetStatus(x, 'Failed')">Failed</a></li>							
+							<li ng-repeat-start="s in statuses" ng-class="s.cssClass"><a href="#" ng-click="SetStatus(x, s.name)">{{s.name}}</a></li>
+							<li ng-repeat-end role="separator" class="divider"></li>
 						  </ul>
 						</div>
 						
