@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 	
-	<title>Snackr - Vendor</title>
+	<title>Snackr - Runner</title>
 	
 	<!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -72,42 +72,42 @@ var app = angular.module("Snackr", []);
 	
 app.controller("myCtrl", function($scope, $http, $interval) {   
 			
-	$scope.baseUrl = 	"https://snackr-webapi-servicegateway-fulfilment-dev.azurewebsites.net";				// dev
+	$scope.baseUrl = 	"https://snackr-webapi-servicegateway-delivery-dev.azurewebsites.net";				// dev
 	//$scope.baseUrl = 	"";	// integration
 	//$scope.baseUrl = 	"";				// release
 	
 //	$scope.cartItems = [];
 //	
-	// get orders
+	// get deliveries
 	$scope.showSpinner = true;
-	$http.get($scope.baseUrl + "/api/OrderFulfilments")
+	$http.get($scope.baseUrl + "/api/Deliverys")
     .then(
 		function(response) {
 		
-			$scope.orders = response.data;
+			$scope.deliveries = response.data;
 			$scope.lastUpdated = new Date().toLocaleTimeString();
 			console.log(response);
 			
 			$scope.showSpinner = false;
 				
-			$scope.currentView = "Orders";
+			$scope.currentView = "Deliveries";
 		},
 		function(response) {
 	
 			console.log(response);
 	
 			$scope.showSpinner = false;
-			$scope.error = "Getting Order Fulfilments " + response.statusText;
+			$scope.error = "Getting Deliveries " + response.statusText;
 		}
 	);
 	
-	$scope.RefreshOrders = function() {
+	$scope.RefreshDeliveries = function() {
 		$scope.showSmallSpinner = true;
-		$http.get($scope.baseUrl + "/api/OrderFulfilments")
+		$http.get($scope.baseUrl + "/api/Deliverys")
 		.then(
 			function(response) {
 				$scope.showSmallSpinner = false;
-				$scope.orders = response.data;
+				$scope.deliveries = response.data;
 				$scope.lastUpdated = new Date().toLocaleTimeString();
 			},
 			function(response) {		
@@ -118,8 +118,8 @@ app.controller("myCtrl", function($scope, $http, $interval) {
 		);
 	};
 	
-	// keep getting orders every x seconds
-	$interval(function () { $scope.RefreshOrders(); }, 60 * 1000);
+	// keep getting deliveries every x seconds
+	$interval(function () { $scope.RefreshDeliveries(); }, 60 * 1000);
 	
 	$scope.SetOrderStatus = function(order, status) {
 		console.log(order);
@@ -146,7 +146,7 @@ app.controller("myCtrl", function($scope, $http, $interval) {
 				console.log(response);
 				$scope.showSpinner = false;
 				
-				$scope.RefreshOrders();
+				$scope.RefreshDeliveries();
 			},
 			function(response) {		
 				console.log(response);
@@ -186,8 +186,8 @@ app.controller("myCtrl", function($scope, $http, $interval) {
 		<strong>Error:</strong> {{error}}
 	</div>
 	
-	<!-- orders -->	
-	<div ng-show="currentView == 'Orders'">
+	<!-- deliveries -->	
+	<div ng-show="currentView == 'Deliveries'">
 		<div class="text-muted pull-right">Last Updated: {{lastUpdated}}
 			<i ng-show="showSmallSpinner" class="fa fa-spinner fa-spin small-spinner"></i>
 		</div>	
@@ -200,7 +200,7 @@ app.controller("myCtrl", function($scope, $http, $interval) {
 				</tr>			
 			</thead>
 			<tbody>
-				<tr ng-repeat="x in orders">
+				<tr ng-repeat="x in deliveries">
 					<td>{{x.id}}</td>					
 					<td>						
 						<table class="table table-striped table-bordered table-condensed">		
