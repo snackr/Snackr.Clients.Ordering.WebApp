@@ -77,13 +77,15 @@ app.controller("myCtrl", function($scope, $http, $interval) {
 	//$scope.baseUrl = 	"";				// release
 	
 	$scope.statuses = [
-		{ name: "collected", cssClass: "bg-warning"},
-		{ name: "rejected",  cssClass: "bg-danger"},
-		{ name: "not-at-pickup-location",  cssClass: "bg-danger"},
-		{ name: "arrived-at-drop-off-location",  cssClass: "bg-success"},
-		{ name: "completed", cssClass: "bg-success"},
-		{ name: "failed", cssClass: "bg-danger"}
+		{ name: "collected", tabTitle: "Collected", name2: "OnRoute", cssClass: "bg-warning"},
+		{ name: "rejected", tabTitle: "Rejected", name2: "Rejected", cssClass: "bg-danger"},
+		{ name: "not-at-pickup-location", tabTitle: "@Pickup", name2: "NotAtPickupLocation", cssClass: "bg-danger"},
+		{ name: "arrived-at-drop-off-location", tabTitle: "@Dropoff", name2:"ArrivedAtDropOffLocation", cssClass: "bg-success"},
+		{ name: "completed", tabTitle: "Completed", name2: "Completed", cssClass: "bg-success"},
+		{ name: "failed", tabTitle: "Failed", name2: "Failed", cssClass: "bg-danger"}
 	];
+	
+	$scope.FilterStatus = "";
 
 	// get deliveries
 	$scope.showSpinner = true;
@@ -155,7 +157,14 @@ app.controller("myCtrl", function($scope, $http, $interval) {
 			}
 		);				
 	};
-
+	
+	$scope.SetFilterStatus = function(s) {
+		if( s == null ) {
+			$scope.FilterStatus = "";
+		} else {
+			$scope.FilterStatus = s.name2;
+		}
+	};
 })
 /*.directive('todoControl', function() {
 	return {
@@ -185,12 +194,25 @@ app.controller("myCtrl", function($scope, $http, $interval) {
 		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		<strong>Error:</strong> {{error}}
 	</div>
-	
+		
 	<!-- deliveries -->	
 	<div ng-show="currentView == 'Deliveries'">
 		<div class="text-muted pull-right">Last Updated: {{lastUpdated}}
 			<i ng-show="showSmallSpinner" class="fa fa-spinner fa-spin small-spinner"></i>
-		</div>	
+		</div>
+		<div class="clearfix"></div>
+		
+		<!-- Nav tabs -->
+		<div>			
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active">
+					<a ng-click="SetFilterStatus(null)" aria-controls="All" role="tab" data-toggle="tab">All</a>
+				</li>
+				<li role="presentation" ng-repeat="s in statuses">
+					<a ng-click="SetFilterStatus(s)" aria-controls="{{s.name}}" role="tab" data-toggle="tab">{{s.tabTitle}}</a>
+				</li>
+			</ul>
+		</div>
 		
 		<table class="table table-striped">
 			<thead>
@@ -200,7 +222,7 @@ app.controller("myCtrl", function($scope, $http, $interval) {
 				</tr>			
 			</thead>
 			<tbody>
-				<tr ng-repeat="x in deliveries">
+				<tr ng-repeat="x in deliveries | filter:{ status: FilterStatus}">
 					<td>{{x.id}}</td>					
 					<td>
 
