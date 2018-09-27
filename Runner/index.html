@@ -77,12 +77,12 @@ app.controller("myCtrl", function($scope, $http, $interval) {
 	//$scope.baseUrl = 	"";				// release
 	
 	$scope.statuses = [
-		{ name: "collected", tabTitle: "Collected", name2: "OnRoute", cssClass: "bg-warning"},
-		{ name: "rejected", tabTitle: "Rejected", name2: "Rejected", cssClass: "bg-danger"},
-		{ name: "not-at-pickup-location", tabTitle: "@Pickup", name2: "NotAtPickupLocation", cssClass: "bg-danger"},
-		{ name: "arrived-at-drop-off-location", tabTitle: "@Dropoff", name2:"ArrivedAtDropOffLocation", cssClass: "bg-success"},
-		{ name: "completed", tabTitle: "Completed", name2: "Completed", cssClass: "bg-success"},
-		{ name: "failed", tabTitle: "Failed", name2: "Failed", cssClass: "bg-danger"}
+		{ name: "collected", 					tabTitle: "Collected", 	name2: "OnRoute", 					cssClass: "bg-warning",	confirm: false},
+		{ name: "rejected", 					tabTitle: "Rejected", 	name2: "Rejected", 					cssClass: "bg-danger",	confirm: true},
+		{ name: "not-at-pickup-location",		tabTitle: "@Pickup", 	name2: "NotAtPickupLocation", 		cssClass: "bg-danger",	confirm: true},
+		{ name: "arrived-at-drop-off-location", tabTitle: "@Dropoff", 	name2:"ArrivedAtDropOffLocation", 	cssClass: "bg-success",	confirm: false},
+		{ name: "completed", 					tabTitle: "Completed", 	name2: "Completed", 				cssClass: "bg-success",	confirm: false},
+		{ name: "failed", 						tabTitle: "Failed", 	name2: "Failed", 					cssClass: "bg-danger",	confirm: true}
 	];
 	
 	$scope.FilterStatus = "";
@@ -131,14 +131,15 @@ app.controller("myCtrl", function($scope, $http, $interval) {
 	$interval(function () { $scope.RefreshDeliveries(); }, 60 * 1000);
 	
 	$scope.SetStatus = function(order, status) {
-		console.log(order);
+	
+		if( status.confirm && !confirm("Set order to status " + status.name2 + "?") ) return;
 		
 		var url = $scope.baseUrl + "/api/Deliverys/" + order.id + "/";
 		
-		if ($scope.statuses.some(e => e.name === status)) {
-			url += status;
+		if ($scope.statuses.some(e => e.name === status.name)) {
+			url += status.name;
 		} else {
-			alert("Unsupported status: " + status );
+			alert("Unsupported status: " + status.name );
 		}
 		
 		$scope.showSpinner = true;
@@ -243,7 +244,7 @@ app.controller("myCtrl", function($scope, $http, $interval) {
 							{{x.status}} <span class="caret"></span>
 						  </button>
 						  <ul class="dropdown-menu">
-							<li ng-repeat-start="s in statuses" ng-class="s.cssClass"><a href="#" ng-click="SetStatus(x, s.name)">{{s.name}}</a></li>
+							<li ng-repeat-start="s in statuses" ng-class="s.cssClass"><a href="#" ng-click="SetStatus(x, s)">{{s.name}}</a></li>
 							<li ng-repeat-end role="separator" class="divider"></li>
 						  </ul>
 						</div>
