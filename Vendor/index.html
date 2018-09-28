@@ -80,10 +80,12 @@
     $scope.user = {};
 
 	$scope.statuses = [
-		{ name: "approve", 			tabTitle: "Approve", 	name2: "Accepted", 		ssClass: "bg-success",	confirm: false},
-		{ name: "decline",			tabTitle: "Decline", 	name2: "Rejected", 		cssClass: "bg-danger",	confirm: true},
-		{ name: "cancel", 			tabTitle: "Cancel", 	name2: "Canceled", 		cssClass: "bg-danger",	confirm: true},
-		{ name: "ready-for-pick", 	tabTitle: "Ready", 		name2: "Completed", 	cssClass: "bg-success",	confirm: false}	];
+		{ name: "awaiting", 		tabTitle: "In-Process", 	name2: "AwaitingConfirmation", 	cssClass: "bg-success",	confirm: false, inMenu: false},
+		{ name: "approve", 			tabTitle: "Approve", 		name2: "Accepted", 				cssClass: "bg-success",	confirm: false, inMenu: true},
+		{ name: "decline",			tabTitle: "Decline", 		name2: "Rejected", 				cssClass: "bg-danger",	confirm: true, inMenu: true},
+		{ name: "cancel", 			tabTitle: "Cancel", 		name2: "Canceled", 				cssClass: "bg-danger",	confirm: true, inMenu: true},
+		{ name: "ready-for-pick", 	tabTitle: "Ready", 			name2: "Completed", 			cssClass: "bg-success",	confirm: false, inMenu: true}	
+	];
 	
 	$scope.FilterStatus = "";
 
@@ -244,7 +246,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="x in filteredOrders = (orders | filter:{ status: FilterStatus})">
+                    <tr ng-repeat="x in filteredOrders = (orders | filter:{ status: FilterStatus} | orderBy:'-')">
                         <td>
                             {{x.id}}<br />
                             
@@ -265,7 +267,8 @@
                                     {{x.status}} <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
-							<li ng-repeat-start="s in statuses" ng-class="s.cssClass"><a href="#" ng-click="SetStatus(x, s)">{{s.name}}</a></li>
+									<li ng-repeat-start="s in statuses | filter: {inMenu: true}" ng-class="s.cssClass">
+										<a href="#" ng-click="SetStatus(x, s)">{{s.name}}</a></li>
                                     <li ng-repeat-end role="separator" class="divider"></li>
                                 </ul>
                             </div>
