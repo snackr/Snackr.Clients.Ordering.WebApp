@@ -1,0 +1,129 @@
+﻿<div ng-controller="customerEventAttendanceProfiles_CreateController">
+
+    <h6 class="titleBox mb-3">
+        Enter Attendence Details for {{model.event.name}}<br />
+        <small class="text-muted">{{model.event.venue.name}}</small>
+    </h6>
+
+    <div>
+        <div class="form-group">
+            <label for="seatKey">Where are you sitting today?</label>
+            <select id="seatKey" ng-model="model.seatKey" class="form-control">
+                <option>STR000</option>
+                <option>STR001</option>
+                <option>STR002</option>
+                <option>STR003</option>
+                <option>STR004</option>
+                <option>STR005</option>
+                <option>STR006</option>
+                <option>STR007</option>
+                <option>STR008</option>
+                <option>STR009</option>
+                <option>STR010</option>
+                <option>STR011</option>
+                <option>STR012</option>
+                <option>STR013</option>
+                <option>STR014</option>
+                <option>STR015</option>
+                <option>STR016</option>
+                <option>STR017</option>
+                <option>STR018</option>
+                <option>STR019</option>
+                <option>STR020</option>
+                <option>STR021</option>
+                <option>STR022</option>
+                <option>STR023</option>
+                <option>STR024</option>
+                <option>STR025</option>
+                <option>STR026</option>
+                <option>STR027</option>
+                <option>STR028</option>
+                <option>STR029</option>
+                <option>STR030</option>
+                <option>STR031</option>
+                <option>STR032</option>
+                <option>STR033</option>
+                <option>STR034</option>
+                <option>STR035</option>
+                <option>STR036</option>
+                <option>STR037</option>
+                <option>STR038</option>
+                <option>STR039</option>
+                <option>STR040</option>
+                <option>STR041</option>
+                <option>STR042</option>
+                <option>STR043</option>
+                <option>STR044</option>
+                <option>STR045</option>
+                <option>STR046</option>
+                <option>STR047</option>
+                <option>STR048</option>
+                <option>STR049</option>
+                <option>STR050</option>
+                <option>STR051</option>
+                <option>STR052</option>
+                <option>STR053</option>
+                <option>STR054</option>
+                <option>STR055</option>
+                <option>STR056</option>
+                <option>STR057</option>
+                <option>STR058</option>
+                <option>STR059</option>
+                <option>STR060</option>
+                <option>STR061</option>
+                <option>STR062</option>
+                <option>STR063</option>
+                <option>STR064</option>
+                <option>STR065</option>
+                <option>STR066</option>
+                <option>STR067</option>
+                <option>STR068</option>
+                <option>STR069</option>
+                <option>STR070</option>
+                <option>STR071</option>
+                <option>STR072</option>
+                <option>STR073</option>
+                <option>STR074</option>
+                <option>STR075</option>
+                <option>STR076</option>
+                <option>STR077</option>
+                <option>STR078</option>
+                <option>STR079</option>
+                <option>STR080</option>
+                <option>STR081</option>
+                <option>STR082</option>
+                <option>STR083</option>
+                <option>STR084</option>
+                <option>STR085</option>
+                <option>STR086</option>
+                <option>STR087</option>
+                <option>STR088</option>
+                <option>STR089</option>
+                <option>STR090</option>
+                <option>STR091</option>
+                <option>STR092</option>
+                <option>STR093</option>
+                <option>STR094</option>
+                <option>STR095</option>
+                <option>STR096</option>
+                <option>STR097</option>
+                <option>STR098</option>
+                <option>STR099</option>
+                <option>STR100</option>
+            </select>
+            <small id="emailHelp" class="form-text text-muted">Check your ticket stub</small>
+        </div>
+
+        <div class="form-group">
+            <label for="promoCode">Promo Code</label>
+            <input type="text" class="form-control" id="promoCode">
+            <small id="emailHelp" class="form-text text-muted">GOPIES! for free snacks</small>
+        </div>
+
+    </div>
+
+    <button type="button" class="btn btn-snackr-primary btn-block" ng-click="submit()">
+        Save
+    </button>
+
+</div>

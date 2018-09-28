@@ -262,11 +262,13 @@
                                 </tr>
                             </table>
 
+							<div class="well well-sm">
+							
 							Status: {{x.status}}
 							
 							<button ng-repeat-start="s in statuses | filter: {inMenu: true}" type="button" ng-class="s.cssClass" ng-click="SetStatus(x, s)">{{s.name}}</button>
 							<span ng-repeat-end>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-
+</div>
                         </td>
                     </tr>
                 </tbody>

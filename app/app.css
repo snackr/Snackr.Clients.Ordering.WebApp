@@ -1,0 +1,115 @@
+﻿
+/*
+yellow : #f9f380
+pink dark : #ff549e
+pink ligh : ffebea
+blue : #bde0f6
+font-family header : bebas-neue
+font-family main : proxima-soft
+*/
+
+
+
+
+body {
+    padding-top: 110px;
+    padding-bottom: 110px;
+	background-color: pink;
+}
+
+#myNavmenu {
+    background-color: #ffebea;
+}
+
+.header-branding-logo {
+    max-width: 100px;
+}
+
+.btn-outline-light {
+    color: #ff549e;
+    background-color: #fff;
+}
+
+.view-heading {
+    color: #ffebea;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+
+
+.cartMenu {
+    background-color: #ff549e;
+    padding: 15px;
+    color: #FFF;
+}
+
+
+.titleBox {
+    background-color: #ffebea;
+    padding : 10px;
+}
+
+
+.list-group div:nth-child(even) {
+    /*background-color: red;*/
+}
+
+.badge-snackr-pink {
+    background-color: #ffebea
+}
+
+.badge-snackr-blue {
+    background-color: #bde0f6
+}
+
+.badge-snackr-yellow {
+    background-color: #f9f380
+}
+
+.badge-snackr-primary {
+    background-color: #ff549e;
+    color: #fff;
+}
+
+.navbar.fixed-top {
+    background-color: #fff;
+}
+
+legend {
+    font-size: 1.3rem;
+}
+
+.modal-header {
+    background-color: #ffebea;
+}
+
+.btn-snackr-primary {
+    background-color: #ff549e;
+    color: #fff;
+}
+
+.em-snackr-primary {
+    color: #ff549e;
+    font-weight: bold;
+}
+
+
+.btn-outline-snackr-primary {
+    color: #ff549e;
+    background-color: #fff;
+    border-color: #ff549e;
+}
+
+.navmenu-default .navmenu-nav > li > .btn-link, .navbar-default .navbar-offcanvas .navmenu-nav > li > .btn-link {
+    color: #777;
+}
+
+a.custom-card,
+a.custom-card:hover {
+  color: inherit;
+}
+
+div.vendor-list:nth-child(even) a { background: #FFEBEA; }
+div.vendor-list:nth-child(odd) a { background: white; }
+

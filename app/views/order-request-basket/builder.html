@@ -1,0 +1,178 @@
+﻿<div ng-controller="orderRequestBasket_builderController">
+
+    <h6 class="titleBox mb-3">
+        Snacking with {{model.eventVendorVenue.entity.vendor.name}}<br />
+        <small class="text-muted">{{model.eventVendorVenue.entity.vendor.description}}</small>
+    </h6>
+
+    <fieldset ng-repeat="menuGrp in model.eventVendorVenue.profileDocument.menu.menuGroups" class="mb-3">
+        <legend>
+            {{menuGrp.name}} <br />
+            <small class="text-muted">{{menuGrp.description}}</small>
+        </legend>
+
+        <div class="list-group">
+            <div ng-repeat="menuItem in menuGrp.menuItems">
+                <a class="list-group-item list-group-item-action flex-column align-items-start {{ menuItem.cart.qty > 0 ? 'selected' : '' }}" data-toggle="modal" data-target="#addItemModal-{{menuItem.id}}">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{menuItem.name}}</h5>
+                        <span class="em-snackr-primary">{{menuItem.price | currency}}</span>
+                    </div>
+                    <p class="mb-1">{{menuItem.description}}</p>
+
+                    <span class="badge badge-snackr-primary" ng-if="(menuItem.cart.qty > 0)">{{ menuItem.cart.qty }} Selected</span>
+
+                </a>
+                <div class="modal" tabindex="-1" role="dialog" id="addItemModal-{{menuItem.id}}">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">{{menuItem.name}}</h5>
+                                <span class="text-muted mt-1">{{menuItem.price | currency}}</span>
+                            </div>
+                            <div class="modal-body">
+                                <div>
+                                    <div class="form-group">
+                                        <label for="exampleFormControlInput1">Quantity</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend" ng-if="(menuItem.cart.qty > 0)">
+                                                <button class="btn btn-outline-snackr-primary" type="button" ng-click="menuItem.cart.qty = menuItem.cart.qty - 1; refreshCart()"><i class="fas fa-minus"></i></button>
+                                            </div>
+                                            <input type="number" class="form-control" ng-init="0" ng-model="menuItem.cart.qty" readonly />
+                                            <div class="input-group-append" ng-if="(menuItem.cart.qty < 4)">
+                                                <button class="btn btn-outline-snackr-primary" type="button" ng-click="menuItem.cart.qty = menuItem.cart.qty + 1; refreshCart()"><i class="fas fa-plus"></i></button>
+                                            </div>
+                                        </div>
+
+                                        <small class="text-danger" ng-if="(menuItem.cart.qty === 4)">
+                                            Sorry Flanders you cant order more than 4 of the same item at one time.
+                                        </small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleFormControlInput1">Special Requests</label>
+                                        <textarea class="form-control" rows="2" ng-model="menuItem.cart.instructions">
+                                        </textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" ng-click="menuItem.cart.qty = 0; refreshCart()" data-dismiss="modal">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <button type="button" class="btn btn-snackr-primary" data-dismiss="modal">Add To Basket ({{(menuItem.price * menuItem.cart.qty) | currency}})</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </fieldset>
+
+    <a data-toggle="modal" data-target="#cartModal">
+        <div class="fixed-bottom cartMenu d-flex justify-content-between">
+            <small>Delivering To Seat: <br />{{ model.customerEventAttendanceProfile.seatLocation.key }}</small>
+            <div>
+                Checkout <i class="fas fa-shopping-cart"></i> {{ (model.cart.total * 1.0) | currency }}
+            </div>
+        </div>
+    </a>
+
+    <div class="modal" tabindex="-1" role="dialog" id="cartModal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Your Order</h5>
+                    <span class="text-muted"></span>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped table-hover table-borderless">
+                        <thead>
+                            <tr>
+                                <th style="width:20px;"></th>
+                                <th>Item</th>
+                                <th class="text-right">Qty</th>
+                                <th class="text-right">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="checkoutline in model.cart.items">
+                                <td>
+                                    <button class="btn btn-outline-snackr-primary" ng-click="checkoutline.cart.qty = 0; refreshCart()">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    {{checkoutline.name}}
+                                    <br />
+                                    <small class="text-muted">{{checkoutline.description}}</small>
+                                </td>
+                                <td class="text-right">{{checkoutline.cart.qty}}</td>
+                                <td class="text-right">{{(checkoutline.price * checkoutline.cart.qty) | currency}}</td>
+                            </tr>
+                        </tbody>
+
+                        <tfoot>
+                            <tr class="text-muted">
+                                <td colspan="3" class="text-right"><small>Delivery Fee:</small></td>
+                                <td class="text-right"><small>$2.00</small></td>
+                            </tr>
+
+                            <tr class="text-muted">
+                                <td colspan="3" class="text-right"><small>Sub Total:</small></td>
+                                <td class="text-right"><small>{{ (model.cart.total + 2.00) | currency }}</small></td>
+                            </tr>
+
+                            <tr class="text-muted">
+                                <td colspan="3" class="text-right"><small>Minus Promo Code:</small></td>
+                                <td class="text-right text-danger"><small>{{ ((model.cart.total + 2.00) * -1.0) | currency }}</small></td>
+                            </tr>
+
+                            <tr>
+                                <th colspan="3" class="text-right">Total:</th>
+                                <th class="text-right">$0.00</th>
+                            </tr>
+
+
+                        </tfoot>
+
+                    </table>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Return to Menu</button>
+                    <button type="button" class="btn btn-snackr-primary" ng-click="submitOrderRequestBasket()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog" id="submittingOrderRequestBasketModal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Your snacks are being processed <i class="fa fa-spinner fa-spin"></i></h5>
+                    <span class="text-muted"></span>
+                </div>
+                <div class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog" id="orderRequestBasketSubmittedSuccessfullyModal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Put your feet up. Your snacks will be with you shortly!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
