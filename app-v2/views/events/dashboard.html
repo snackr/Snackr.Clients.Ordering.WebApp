@@ -1,0 +1,23 @@
+﻿<div ng-controller="event_dashboardController">
+    
+    <h4 class="view-heading mb-3">Upcoming Events</h4>
+    
+    <div class="card-columns">
+
+        <div ng-repeat="event in events" class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{event.name}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{event.venue.name}} | {{event.dateTimeFrom | date:'dd MMM yyyy HH:mm'}}</h6>
+                <p class="card-text">{{event.description}}</p>
+                <a href="#!/events/{{event.id}}/details" class="btn btn-primary">
+                    View
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+

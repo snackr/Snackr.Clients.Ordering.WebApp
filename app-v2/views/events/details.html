@@ -1,0 +1,34 @@
+﻿<div ng-controller="event_detailsController">
+
+    <h6 class="titleBox mb-3" >
+        You're @ {{model.event.name}}<br />
+        <small class="text-muted">{{model.event.venue.name}}</small>
+    </h6>
+    
+
+
+    <!--<div class="jumbotron">
+        <h1 class="display-4">{{model.event.name}}</h1>
+        <p class="lead">
+            {{model.event.venue.name}} | {{model.event.dateTimeFrom | date:'dd MMM yyyy HH:mm'}}
+        </p>
+        <hr class="my-4">
+        <p>{{event.description}}</p>
+    </div>-->
+
+    <h4 class="view-heading mb-3">Choose your Vendor</h4>
+
+    <div class="list-group">
+        <div ng-repeat="eventVendor in model.eventVendors">
+            <a class="list-group-item list-group-item-action flex-column align-items-start" href="#!/order-request-basket/builder/{{model.customerEventAttendanceProfile.id}}/{{eventVendor.eventVendorVenueId}}">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{eventVendor.vendor.name}}</h5>
+                    <small class="text-muted">{{eventVendor.vendor.code}}</small>
+                </div>
+                <p class="mb-1">{{eventVendor.vendor.description}}</p>
+                <span class="badge badge-snackr-pink">5.0 <i class="fas fa-star fa-sm"></i></span> <span class="badge badge-snackr-yellow">Fresh</span> <span class="badge badge-snackr-blue">Great Value</span>
+            </a>
+        </div>
+    </div>
+
+</div>
